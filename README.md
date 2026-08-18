@@ -18,9 +18,13 @@ A full-stack Python Flask web application designed for personal expense tracking
 - **Frontend:** HTML5, Jinja2 Templates, Bootstrap 5
 - **Database:** SQLite (Relational ORM)
 
+## Live Demo
+
+https://flask-finance-tracker-j8ny.onrender.com/login?next=%2F
+
 ## 🚀 How to Run Locally
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/flask-finance-tracker.git](https://github.com/YOUR_USERNAME/flask-finance-tracker.git)
+   git clone [https://github.com/mrinalpstu/flask-finance-tracker.git]
    cd flask-finance-tracker
