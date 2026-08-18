@@ -1,7 +1,7 @@
 import csv
 import io
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, flash, Response
+from flask import Flask, render_template, request, redirect, url_for, flash, Response, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -117,14 +117,22 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
 
+        # check if the username is already taken or not
         if User.query.filter_by(username=username).first():
-            flash('Username already exists!', 'danger')
+            flash('Username already exists! Choose another.', 'danger')
             return redirect(url_for('register'))
 
+        # Email existence check
+        if User.query.filter_by(email=email).first():
+            flash('Email already registered! Please login or use a different email.', 'danger')
+            return redirect(url_for('register'))
+
+        # If no duplication. create new user
         hashed_pw = generate_password_hash(password, method='scrypt')
         new_user = User(username=username, email=email, password=hashed_pw)
         db.session.add(new_user)
         db.session.commit()
+        
         flash('Registration successful! Please login.', 'success')
         return redirect(url_for('login'))
 
@@ -132,12 +140,17 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'GET' and not session.get('_flashes'):
+        # কোনো কারণে আগের ক্লিয়ার না হওয়া মেসেজ থাকলে তা মুছে ফেলবে
+        pass
+
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
         user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password, password):
+            session.pop('_flashes', None)  # সফল লগইনে ফ্ল্যাশ মেসেজ ক্লিয়ার
             login_user(user)
             return redirect(url_for('dashboard'))
         else:

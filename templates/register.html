@@ -9,6 +9,19 @@
 <div class="container" style="max-width: 400px;">
     <div class="card p-4 shadow-sm">
         <h3 class="text-center mb-3">Register</h3>
+
+        <!-- Flash Messages for Register Page -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show p-2" role="alert">
+                <small>{{ message }}</small>
+                <button type="button" class="btn-close p-2" data-bs-dismiss="alert"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
         <form action="/register" method="POST">
             <div class="mb-3">
                 <label>Username</label>
@@ -27,5 +40,6 @@
         <p class="text-center mt-3 mb-0">Already have an account? <a href="/login">Login</a></p>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
